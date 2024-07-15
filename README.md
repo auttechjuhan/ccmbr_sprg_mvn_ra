@@ -173,6 +173,11 @@ mvn clean install
 Use the following command to run ccmbr_sprg_mvn_ra:
 
 ```sh
+mvn test -Dcucumber.filter.tags='@listUsers'
+```
+
+
+```sh
 java -jar target/myapp.jar
 ```
 
