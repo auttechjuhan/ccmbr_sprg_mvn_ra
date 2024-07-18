@@ -43,13 +43,12 @@ jobs:
     - name: Build
       shell: bash
       run: |
-        curl -L -O https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
-        unzip -o build-wrapper-linux-x86.zip
-        chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
-        mkdir build
-        cd build
-        cmake ..
-        build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir cfamily-output cmake --build .
+          curl -L -O https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+          unzip -o build-wrapper-linux-x86.zip
+          chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
+          mkdir build
+          cd build
+          build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir cfamily-output cmake ..
 
     - name: Test
       working-directory: ${{runner.workspace}}/build
