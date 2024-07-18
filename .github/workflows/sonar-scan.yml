@@ -39,16 +39,18 @@ jobs:
           wget -q https://developer.nordicsemi.com/nRF5_SDK/nRF5_SDK_v15.x.x/nRF5_SDK_15.3.0_59ac345.zip
           unzip -q nRF5_SDK_15.3.0_59ac345.zip
         fi
-        
+
     - name: Build
       shell: bash
       run: |
-          curl -L -O https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
-          unzip -o build-wrapper-linux-x86.zip
-          chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
-          mkdir build
-          cd build
-          build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir cfamily-output cmake ..
+        curl -L -O https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+        unzip -o build-wrapper-linux-x86.zip -d build-wrapper
+        chmod +x build-wrapper/build-wrapper-linux-x86-64
+        mkdir build
+        cd build
+        ../build-wrapper/build-wrapper-linux-x86-64 --out-dir cfamily-output cmake ..
+        
+    
 
     - name: Test
       working-directory: ${{runner.workspace}}/build
