@@ -40,9 +40,13 @@ jobs:
           unzip -q nRF5_SDK_15.3.0_59ac345.zip
         fi
 
-    # Runs a single command using the runners shell
-    - name: Compile project
-      run: build-wrapper-linux-x86-64 --out-dir bw-output makefile sonar
+
+  - name: Compile project
+    run: |
+          curl -L -O https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+          unzip -o build-wrapper-linux-x86.zip
+          build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output makefile sonar
+
 
     - name: Set up Ruby 2.7
       uses: ruby/setup-ruby@v1
