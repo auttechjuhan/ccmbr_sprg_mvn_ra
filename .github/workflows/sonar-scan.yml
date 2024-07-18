@@ -45,7 +45,13 @@ jobs:
         curl -L -O https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
         unzip -o build-wrapper-linux-x86.zip
         chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
+        ldd build-wrapper-linux-x86/build-wrapper-linux-x86-64
         build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output makefile sonar
+      shell: /usr/bin/bash -e {0}
+      env:
+        JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.11-9/x64
+        JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.11-9/x64
+        SONAR_HOST_URL: https://sonarcloud.io
 
 
     - name: Set up Ruby 2.7
