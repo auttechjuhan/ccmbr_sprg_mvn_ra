@@ -46,7 +46,10 @@ jobs:
         curl -L -O https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
         unzip -o build-wrapper-linux-x86.zip
         chmod +x build-wrapper-linux-x86/build-wrapper-linux-x86-64
-        build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir cfamily-output cmake --build build --config $BUILD_TYPE
+        mkdir build
+        cd build
+        cmake ..
+        build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir cfamily-output cmake --build .
 
     - name: Test
       working-directory: ${{runner.workspace}}/build
