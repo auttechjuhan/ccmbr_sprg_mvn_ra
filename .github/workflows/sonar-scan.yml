@@ -42,7 +42,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Compile project
-      run: build-wrapper-linux-x86-64 --out-dir bw-output make sonar
+      run: build-wrapper-linux-x86-64 --out-dir bw-output Makefile sonar
 
     - name: Set up Ruby 2.7
       uses: ruby/setup-ruby@v1
@@ -59,7 +59,7 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Run Sonar scanner
       run: |
-        make test_all_gcov
+        Makefile test_all_gcov
         export SONAR_SCANNER_OPTS="-server"
         sonar-scanner \
           -Dsonar.organization=ruuvi \
