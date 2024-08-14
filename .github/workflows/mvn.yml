@@ -1,4 +1,4 @@
-name: ☕♨ Java ♨️ CI with Maven Ⓜ️🪶💻 🦈
+name: 
 
 on:
   push:
@@ -35,16 +35,15 @@ jobs:
         run: |
           mvn test -B -Dcucumber.filter.tags="@springbot"
 
-      - name: Generate Cucumber reports
+      - name: Generate Allure reports
         run: |
-          mvn cucumber-reporting:generate || true
-        continue-on-error: true
+          mvn allure:report
 
-      - name: Upload Cucumber reports as artifact
+      - name: Upload Allure reports as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: SpringBoot Report
-          path: target/cucumber-report/
+          name: Allure Report
+          path: target/allure-report/
 
       - name: Deploy to GitHub Pages
         run: |
@@ -52,9 +51,9 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git remote add origin https://github.com/${GITHUB_REPO}.git
           git checkout -b gh-pages
-          rm -rf target/cucumber-report/
-          mkdir -p target/cucumber-report/
-          cp -r target/cucumber-report/* target/cucumber-report/
+          rm -rf target/allure-report/
+          mkdir -p target/allure-report/
+          cp -r target/allure-report/* target/allure-report/
           git add .
-          git commit -m "Deploy Cucumber reports to GH Pages"
+          git commit -m "Deploy Allure reports to GH Pages"
           git push --force origin gh-pages
