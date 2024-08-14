@@ -141,27 +141,42 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<plugin>
-		<groupId>net.masterthought</groupId>
-		<artifactId>maven-cucumber-reporting</artifactId>
-		<version>5.7.0</version>
-		<executions>
-			<execution>
-				<id>generate-cucumber-reports</id>
-				<phase>test</phase>
-				<goals>
-					<goal>generate</goal>
-				</goals>
-				<configuration>
-					<projectName>${project.name}</projectName>
-					<outputDirectory>${project.build.directory}/cucumber-report</outputDirectory>
-					<jsonFiles>
-						<jsonFile>${project.build.directory}/cucumber.json</jsonFile>
-					</jsonFiles>
-				</configuration>
-			</execution>
-		</executions>
-	</plugin>
+
+	
+
+
+	
+
+	
+
+
+
+<build>
+		<plugins>
+			<plugin>
+				<groupId>net.masterthought</groupId>
+				<artifactId>maven-cucumber-reporting</artifactId>
+				<version>5.7.0</version>
+				<executions>
+					<execution>
+						<id>generate-cucumber-reports</id>
+						<phase>test</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<projectName>${project.name}</projectName>
+							<outputDirectory>${project.build.directory}/cucumber-report</outputDirectory>
+							<jsonFiles>
+								<jsonFile>${project.build.directory}/cucumber.json</jsonFile>
+							</jsonFiles>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<profiles>
 		<profile>
 			<id>cucumber-reporting</id>
@@ -176,8 +191,5 @@
 			</build>
 		</profile>
 	</profiles>
-
-
-
-</project>
 	
+</project>
