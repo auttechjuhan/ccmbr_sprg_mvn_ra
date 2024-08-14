@@ -12,10 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
+      - name: Set up JDK 22 LTS
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          java-version: '22'
           distribution: 'temurin'
 
       - name: Cache Maven packages
@@ -29,7 +29,7 @@ jobs:
 
       - name: Build with Maven
         run: |
-          mvn clean package -B -DskipTests -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
+          mvn clean package -B -DskipTests
 
       - name: Run Cucumber tests
         run: |
