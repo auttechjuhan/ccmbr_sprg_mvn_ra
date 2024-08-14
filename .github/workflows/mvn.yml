@@ -3,57 +3,58 @@ name: ☕♨ Java ♨️ CI with Maven Ⓜ️🪶💻 🦈
 on:
   push:
     branches:
-      - master 🌟
+      - master
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest 🐧
+    runs-on: ubuntu-latest
     steps:
-      - name: 📦 Checkout code
-        uses: actions/checkout@v2 📈
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: ☕️ Set up JDK 22 LTS
-        uses: actions/setup-java@v2 📊
+      - name: Set up JDK 22 LTS
+        uses: actions/setup-java@v2
         with:
-          java-version: '22' 🔢
-          distribution: 'temurin' 📦
+          java-version: '22'
+          distribution: 'temurin'
 
-      - name: 📈 Cache Maven packages
+      - name: Cache Maven packages
         id: cache
-        uses: actions/cache@v3 📊
+        uses: actions/cache@v3
         with:
-          path: ~/.m2/repository 📁
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }} 🔑
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven- 🔑
+            ${{ runner.os }}-maven-
 
-      - name: 🏗️ Build with Maven
+      - name: Build with Maven
         run: |
-          mvn clean package -B -DskipTests 💪
+          mvn clean package -B -DskipTests
 
-      - name: 🌟 Run Cucumber tests
+      - name: Run Cucumber tests
         run: |
-          mvn test -B -Dcucumber.filter.tags="@springbot" 🤖
+          mvn test -B -Dcucumber.filter.tags="@springbot"
 
-      - name: 📊 Generate Cucumber reports
+      - name: Generate Cucumber reports
         run: |
-          mvn cucumber-reporting:generate || true 📈
+          mvn cucumber-reporting:generate || true
+        continue-on-error: true
 
-      - name: 📁 Upload Cucumber reports as artifact
-        uses: actions/upload-artifact@v3 📈
+      - name: Upload Cucumber reports as artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: SpringBoot Report 📊
-          path: target/cucumber-report/ 📁
+          name: SpringBoot Report
+          path: target/cucumber-report/
 
-      - name: 🚀 Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
         run: |
-          git config --global user.name "github-actions" 🤖
-          git config --global user.email "github-actions@github.com" 📧
-          git remote add origin https://github.com/${GITHUB_REPO}.git 🌐
-          git checkout -b gh-pages 📈
-          rm -rf target/cucumber-report/ 🚮
-          mkdir -p target/cucumber-report/ 📁
-          cp -r target/cucumber-report/* target/cucumber-report/ 📈
-          git add . 📈
-          git commit -m "Deploy Cucumber reports to GH Pages" 📝
-          git push --force origin gh-pages 💪
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git remote add origin https://github.com/${GITHUB_REPO}.git
+          git checkout -b gh-pages
+          rm -rf target/cucumber-report/
+          mkdir -p target/cucumber-report/
+          cp -r target/cucumber-report/* target/cucumber-report/
+          git add .
+          git commit -m "Deploy Cucumber reports to GH Pages"
+          git push --force origin gh-pages
