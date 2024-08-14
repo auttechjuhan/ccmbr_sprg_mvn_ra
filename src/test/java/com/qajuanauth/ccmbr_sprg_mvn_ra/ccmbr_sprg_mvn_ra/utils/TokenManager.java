@@ -11,15 +11,15 @@ import com.qajuanauth.ccmbr_sprg_mvn_ra.ccmbr_sprg_mvn_ra.pojos.AuthClientRespon
 
 public class TokenManager {
 
-    public static String getToken(String tokenUrl, String clientID, String clientSecret, String audience) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<AuthClientRequest> request = new HttpEntity<>(
-                new AuthClientRequest(clientID, clientSecret, audience, "client_credentials"));
-        ResponseEntity<AuthClientResponse> responseEntity = restTemplate.exchange(tokenUrl,
-                HttpMethod.POST, request, AuthClientResponse.class);
-        AssertionsForClassTypes.assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
-        AuthClientResponse auth0ClientCredentialFlowResponse = responseEntity.getBody();
-        return auth0ClientCredentialFlowResponse.getAccess_token();
-    }
+	public static String getToken(String tokenUrl, String clientID, String clientSecret, String audience) {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpEntity<AuthClientRequest> request = new HttpEntity<>(
+				new AuthClientRequest(clientID, clientSecret, audience, "client_credentials"));
+		ResponseEntity<AuthClientResponse> responseEntity = restTemplate.exchange(tokenUrl, HttpMethod.POST, request,
+				AuthClientResponse.class);
+		AssertionsForClassTypes.assertThat(responseEntity.getStatusCode().is2xxSuccessful()).isTrue();
+		AuthClientResponse auth0ClientCredentialFlowResponse = responseEntity.getBody();
+		return auth0ClientCredentialFlowResponse.getAccess_token();
+	}
 
 }
