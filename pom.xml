@@ -1,265 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.1</version>
-		<relativePath />
-		<!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.qajuanauth.ccmbr_sprg_mvn_ra</groupId>
-	<artifactId>ccmbr_sprg_mvn_ra</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>ccmbr_sprg_mvn_ra</name>
-	<description>Demo project for Spring Boot</description>
-	<url />
-	<licenses>
-		<license />
-	</licenses>
-	<developers>
-		<developer />
-	</developers>
-	<scm>
-		<connection />
-		<developerConnection />
-		<tag />
-		<url />
-	</scm>
-	<properties>
-		<java.version>17</java.version>
-		<maven.compiler.source>${java.version}</maven.compiler.source>
-		<maven.compiler.target>
-			${java.version}</maven.compiler.target>
+name: 
 
-		<testcontainers.version>1.17.4</testcontainers.version>
+on:
+  push:
+    branches:
+      - master
 
-		<cucumber.version>
-			7.12.0</cucumber.version>
-		<extent-report.version>1.13.0</extent-report.version>
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-		<curl.logger.version>2.1.3</curl.logger.version>
-		<lombok.version>
-			1.18.30</lombok.version>
-	</properties>
+      - name: Set up JDK 22 LTS
+        uses: actions/setup-java@v2
+        with:
+          java-version: '22'
+          distribution: 'temurin'
 
-	<dependencyManagement>
-		<dependencies>
+      - name: Cache Maven packages
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-			<dependency>
-				<groupId>io.cucumber</groupId>
-				<artifactId>
-					cucumber-bom</artifactId>
-				<version>${cucumber.version}</version>
-				<type>pom</type>
-				<scope>
-					import</scope>
-			</dependency>
+      - name: Build with Maven
+        run: |
+          mvn clean package -B -DskipTests
 
-			<dependency>
-				<groupId>io.cucumber</groupId>
-				<artifactId>
-					cucumber-jvm</artifactId>
-				<version>${cucumber.version}</version>
-				<type>pom</type>
-				<scope>
-					import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+      - name: Run Cucumber tests
+        run: |
+          mvn test -B -Dcucumber.filter.tags="@springbot"
 
-	<dependencies>
-		<dependency>
-			<groupId>
-				org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+      - name: Generate Allure reports
+        run: |
+          mvn --failAtEnd allure:report
 
-		<dependency>
-			<groupId>
-				org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
+      - name: Upload Allure reports as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Allure Report
+          path: target/allure-report/
 
-		<dependency>
-			<groupId>
-				org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>
-				test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>
-				cucumber-spring</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>
-				io.cucumber</groupId>
-			<artifactId>cucumber-java</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>
-				io.cucumber</groupId>
-			<artifactId>cucumber-junit-platform-engine</artifactId>
-			<scope>
-				test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.qameta.allure</groupId>
-			<artifactId>allure-maven</artifactId>
-			<version>2.10.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>
-				lombok</artifactId>
-			<version>${lombok.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>
-				org.junit.platform</groupId>
-			<artifactId>junit-platform-suite</artifactId>
-			<scope>
-				test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>
-				junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>
-				org.testcontainers</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>
-				io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>
-				io.rest-assured</groupId>
-			<artifactId>json-schema-validator</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>
-				com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<scope>
-				test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.httpcomponents.core5</groupId>
-			<artifactId>
-				httpcore5</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>
-				com.github.dzieciou.testing</groupId>
-			<artifactId>curl-logger</artifactId>
-			<version>
-				${curl.logger.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-	</dependencies>
-
-	<build>
-		<plugins>
-			<!-- Other plugins... -->
-
-			<plugin>
-				<groupId>io.cucumber</groupId>
-				<artifactId>cucumber-junit-platform-engine</artifactId>
-				<version>${cucumber.version}</version>
-				<configuration>
-					<systemPropertyVariables>
-						<cucumber.reporting.json.enabled>true</cucumber.reporting.json.enabled>
-						<cucumber.reporting.json.file>
-							${project.build.directory}/cucumber.json</cucumber.reporting.json.file>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>io.qameta.allure</groupId>
-				<artifactId>allure-maven-plugin</artifactId>
-				<version>2.10.0</version>
-				<configuration>
-					<reportVersion>2.10.0</reportVersion>
-				</configuration>
-			</plugin>
-
-
-			<plugin>
-				<groupId>net.masterthought</groupId>
-				<artifactId>maven-cucumber-reporting</artifactId>
-				<version>5.3.0</version>
-				<executions>
-					<execution>
-						<id>generate-cucumber-report</id>
-						<phase>test</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<projectName>${project.name}</projectName>
-							<outputDirectory>
-								${project.build.directory}/cucumber-report</outputDirectory>
-							<cucumberOutput>
-								${project.build.directory}/cucumber.json</cucumberOutput>
-							<jsonFiles>
-								<jsonFile>
-									${project.build.directory}/cucumber.json</jsonFile>
-							</jsonFiles>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>net.masterthought</groupId>
-				<artifactId>maven-cucumber-reporting</artifactId>
-				<version>5.3.0</version>
-				<executions>
-					<execution>
-						<id>generate-cucumber-report</id>
-						<phase>test</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<jsonFiles>
-								<param>target/cucumber.json</param>
-							</jsonFiles>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-
-		</plugins>
-	</build>
-
-</project>
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git remote add origin https://github.com/${GITHUB_REPO}.git
+          git checkout -b gh-pages
+          rm -rf target/allure-report/
+          mkdir -p target/allure-report/
+          cp -r target/allure-report/* target/allure-report/
+          git add .
+          git commit -m "Deploy Allure reports to GH Pages"
+          git push --force origin gh-pages
