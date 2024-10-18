@@ -128,9 +128,13 @@ Scenario: The system attempts to log in a non-existent user
   And the response contains "error" with value "User  not found"
 
 Scenario: The system attempts to log in with invalid email
-  Given Masha is logged in
-  When Masha sends a POST request to "/api/login" with the following data:
-    """
-    {
-      "email": "invalidemail",
-      "password": "password
+    Given Masha is logged in
+    When Masha sends a POST request to "/api/login" with the following data:
+      """
+      {
+        "email": "invalidemail",
+        "password": "password123"
+      }
+      """
+    Then the system responds with status code 400
+    And the response contains "error" with value "Invalid email"
