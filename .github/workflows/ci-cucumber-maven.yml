@@ -29,6 +29,10 @@ jobs:
         run: |
           mvn clean package -B -DskipTests
 
+      - name: Run Infer analysis
+        run: |
+          infer run -- mvn clean package -DskipTests
+
       - name: Run Cucumber tests
         run: |
           mvn test -B -Dcucumber.filter.tags="@springbot"
@@ -42,10 +46,6 @@ jobs:
         with:
           name: Allure Report
           path: target/allure-report/
-
-      - name: Run Infer analysis
-        run: |
-          infer run -- mvn clean package -DskipTests
 
       - name: Deploy to GitHub Pages
         run: |
